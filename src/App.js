@@ -1,77 +1,40 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Message from './Message';
-import { addMessage as _addMessage } from './messagesActions';
+import React from 'react'
+import reduxPromiseMiddleware from 'redux-promise-middleware';
+import thunk from 'redux-thunk';
+import MessagesList from './MessagesList'
+import { createStore, applyMiddleware } from 'redux'
+import messages from './messagesReducer'
+import { Provider } from 'react-redux'
 
-class App extends Component {
-  render() {
-    console.log('App/render: this.props=', this.props);
-    const { messages } = this.props;
-    if (!messages) {
-      return (
-        <b>Chargement...</b>
-      );
+// Temporary solution for 'Warning: A component is contentEditable and contains children managed by React'
+// => A way to disable contenteditable warnings #5837 : https://github.com/facebook/react/issues/5837
+console.error = (function () {
+    var error = console.error
+    return function (exception) {
+        if ((exception + '').indexOf('Warning: A component is `contentEditable`') !== 0) {
+            error.apply(console, arguments)
+        }
     }
-    const messageList = messages.map((msg) => (
-      <Message
-        key={msg.id}
-        id={msg.id}
-        text={msg.text}
-        isPublic={msg.isPublic}
-        currentText={msg.currentText}
-        currentIsPublic={msg.currentIsPublic}
-        isEdit={msg.isEdit}
-      />
-    ));
+})()
 
+const middlewares = [
+    // Given a single action with an async payload, the middleware transforms 
+    // the action to a separate pending action and a separate fulfilled/rejected action, 
+    // representing the states of the async action.
+    reduxPromiseMiddleware,
+    // Redux Thunk middleware allows you to write action creators that return a function instead of an action.
+    thunk,
+];
+
+const store = createStore(
+    messages,
+    undefined,
+    applyMiddleware(...middlewares));
+
+export default function App() {
     return (
-      <div className="container-fluid">
-        <div className="card">
-          <h3 className="card-header text-center font-weight-bold text-uppercase py-4">leboncoin</h3>
-          <div className="card-body">
-            <div id="table" className="table-editable">
-              <table className="table table-responsive-md table-striped text-center">
-                <thead>
-                  <tr>
-                    <th className="text-left" style={{width: '70%'}}>Message</th>
-                    <th style={{width: '20%'}}>Public</th>
-                    <th style={{width: '5%'}}> </th>
-                    <th style={{width: '5%'}}> </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {messageList}
-                </tbody>
-              </table>
-              <span className="table-add float-left mb-3 mr-2">
-                <span>
-                  <button
-                    type="button"
-                    className="btn btn-danger btn-rounded btn-sm my-0"
-                    onClick={() => this.props.addMessage()}>
-                    +
-                  </button>
-                </span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+        <Provider store={store}>
+            <MessagesList />
+        </Provider>
+    )
 }
-
-function mapStateToProps(state) {
-  return {
-    messages: state.messages,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  addMessage: () => dispatch(_addMessage()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);

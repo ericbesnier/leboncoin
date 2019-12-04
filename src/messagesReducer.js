@@ -7,7 +7,20 @@ import {
   DELETE_MESSAGE,
 } from './messagesActions';
 
-const messagesReducer = (state, action) => {
+const INITIAL_STATE = {
+  messages: [{
+    id: -1,
+    text: '',
+    isPublic: null,
+    currentText: '',
+    currentIsPublic: null,
+  }],
+  isFulfilled: null,
+  isRejected: null,
+  error: null
+};
+
+const messagesReducer = (state = INITIAL_STATE, action) => {
   console.log('messagesReducer: state=', state);
 
   switch (action.type) {
@@ -19,15 +32,30 @@ const messagesReducer = (state, action) => {
         isRejected: false,
         error: null
       };
-    case `${FETCH_MESSAGES}_FULFILLED`:
+    case `${FETCH_MESSAGES}_FULFILLED`: 
       console.log('messagesReducer: action.type=', action.type);
+      console.log('messagesReducer: action.payload=', action.payload);
+      // init currentText & currentIsPublic with data messages
+      let messagesList = action.payload;
+      console.log('messagesReducer: action.payload=', action.payload);
+      let messages = [];
+      messagesList.forEach((msg) => {
+        messages.push({
+          id: msg.id,
+          text: msg.text,
+          isPublic: msg.isPublic,
+          currentText: msg.text,
+          currentIsPublic: msg.isPublic,
+          isEdit: false
+        })
+      })
       return {
         ...state,
-        messages: action.payload,
+        messages: messages,
         isFulfilled: true,
         isRejected: false,
         error: null
-      };
+      }
     case `${FETCH_MESSAGES}_REJECTED`:
       console.log('messagesReducer: action.type=', action.type);
       return {
@@ -74,7 +102,7 @@ const messagesReducer = (state, action) => {
         isRejected: false,
         error: null
       };
-    case `${DELETE_MESSAGE}_FULFILLED`:{
+    case `${DELETE_MESSAGE}_FULFILLED`: {
       console.log('messagesReducer: action.type=', action.type);
       console.log('messagesReducer: action.payload=', action.payload);
       let messages = state.messages.slice();

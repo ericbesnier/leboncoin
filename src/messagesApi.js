@@ -13,24 +13,31 @@ if (localStorage.getItem('messages') === null) {
 }
 
 class messagesApi {
-  fetchMessages = async () => {
+  _fetchMessagesWithTimeout = () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(JSON.parse(localStorage.getItem("messages")));
+      }, 2000);
+    });
+  }
+  
+  fetchMessages = async () =>  {
     console.log('messagesApi/fetchMessages');
-    return await JSON.parse(localStorage.getItem("messages"));
+    var messages = await this._fetchMessagesWithTimeout();
+    return messages;
   }
 
   saveMessage = async (message) => {
     console.log('messagesApi/saveMessage: message=', message);
     let messagesStorage = JSON.parse(localStorage.getItem('messages'));
     let index = messagesStorage.findIndex(msg => msg.id === message.id)
-    console.log('messagesApi/saveMessage: index=', index);
-
-    if(index === -1){ // save new message
+    if (index === -1) { // save new message
       messagesStorage.push({
         id: message.id,
         text: message.currentText,
         isPublic: message.currentIsPublic,
       })
-    }  else { // update message
+    } else { // update message
       messagesStorage[index] = {
         id: message.id,
         text: message.currentText,
