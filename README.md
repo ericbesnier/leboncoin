@@ -1,3 +1,17 @@
+
+### Objectifs de l'application
+
+Développer une interface capable de lister des messages. Elle permettra également de remplir un message pour le poster.
+
+Un message est composé d’un texte et d’un champ précisant s’il est privé ou public.
+
+L’approche doit être API centrique, mais il n’est pas nécessaire de développer les API pour le test. Des données statiques seront suffisantes pour peupler les pages.
+
+Votre développement doit pouvoir être repris facilement par un autre membre de l’équipe, il doit disposer de tous les éléments pour comprendre votre travail facilement.
+
+Vous devez prendre les meilleures dispositions pour garantir la qualité et le fonctionnement de votre livrable
+
+### NB
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
