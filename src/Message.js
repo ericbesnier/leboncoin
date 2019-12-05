@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import $ from 'jquery';
+
 import {
   addMessage as _addMessage,
   setCurrentText as _setCurrentText,
@@ -18,12 +20,36 @@ class Message extends Component {
     if (!this.props.text) {
       this.textInput.current.focus();
     }
+    this.preventMaxLengthTextInput();
+  }
+
+  preventMaxLengthTextInput(){
+    $(document).ready(function () {
+      // Excempt keys(arrows, del, backspace, home, end);
+      var excempt = [37, 38, 39, 40, 46, 8, 36, 35];
+      // Loop through every editiable thing
+      $("[contentEditable='true']").each(function (index, elem) {
+        var $elem = $(elem);
+        // Check for a property called data-input-length="value" (<div contenteditiable="true" data-input-length="100">)
+        var length = $elem.data('input-length');
+        // Validation of value
+        if (!isNaN(length)) {
+          // Register keydown handler
+          $elem.on('keydown', function (evt) {
+            // If the key isn't excempt AND the text is longer than length stop the action.
+            if (excempt.indexOf(evt.which) === -1 && $elem.text().length > length) {
+              evt.preventDefault();
+              return false;
+            }
+          });
+        }
+      });
+    });
   }
 
   render() {
     console.log('Message/render: this.props=', this.props);
     const { id, text, isPublic, currentText, currentIsPublic, isEdit } = this.props;
-
     return (
       <tr key={this.props.index}>
         <td

@@ -6,6 +6,10 @@ import {
   fetchMessages as _fetchMessages,
 } from './messagesActions';
 
+const pjson = require('../package.json');
+console.log(pjson.version);
+
+
 function Spinner() {
   return (
     <div className="container-fluid">
@@ -59,7 +63,7 @@ export class MessagesList extends Component {
     ));
 
     return (
-      <div className="container-fluid">
+      <div className="container-fluid">v{pjson.version}
         <div className="card">
           <h3 className="card-header text-center font-weight-bold text-uppercase py-4">leboncoin</h3>
           <div className="card-body">
