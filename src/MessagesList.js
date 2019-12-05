@@ -30,11 +30,11 @@ function Spinner() {
     </div>
   )
 }
-class MessagesList extends Component {
+
+export class MessagesList extends Component {
   constructor(props) {
     super(props);
     console.log('MessagesList/render: this.props=', this.props);
-
     this.props.fetchMessages();
   }
 

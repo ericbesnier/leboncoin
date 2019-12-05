@@ -7,20 +7,20 @@ import {
   DELETE_MESSAGE,
 } from './messagesActions';
 
-const INITIAL_STATE = {
-  messages: [{
-    id: -1,
-    text: '',
-    isPublic: null,
-    currentText: '',
-    currentIsPublic: null,
-  }],
-  isFulfilled: null,
-  isRejected: null,
-  error: null
-};
+// const INITIAL_STATE = {
+//   messages: [{
+//     id: -1,
+//     text: '',
+//     isPublic: null,
+//     currentText: '',
+//     currentIsPublic: null,
+//   }],
+//   isFulfilled: null,
+//   isRejected: null,
+//   error: null
+// };
 
-const messagesReducer = (state = INITIAL_STATE, action) => {
+const messagesReducer = (state, action) => {
   console.log('messagesReducer: state=', state);
 
   switch (action.type) {

@@ -26,12 +26,28 @@ const middlewares = [
     thunk,
 ];
 
+const INITIAL_STATE = {
+    messages: [{
+      id: -1,
+      text: '',
+      isPublic: null,
+      currentText: '',
+      currentIsPublic: null,
+    }],
+    isFulfilled: null,
+    isRejected: null,
+    error: null
+  };
+
 const store = createStore(
     messages,
-    undefined,
+    INITIAL_STATE,
     applyMiddleware(...middlewares));
 
 export default function App() {
+    console.log('App: store=', store);
+    console.log('App: store.getState()=', store.getState());
+
     return (
         <Provider store={store}>
             <MessagesList />
