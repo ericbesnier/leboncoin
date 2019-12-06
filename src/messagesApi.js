@@ -1,11 +1,12 @@
 // import { clear } from "sisteransi";
 // localStorage.clear()
+var shortid = require ('shortid'); 
 
 const INITIAL_MESSAGES = [
-  { id: 1, text: 'message 1', isPublic: true },
-  { id: 2, text: 'message 2', isPublic: false },
-  { id: 3, text: 'message 3', isPublic: true },
-  { id: 4, text: 'message 4', isPublic: true },
+  { id: shortid.generate(), text: 'message 1', isPublic: true },
+  { id: shortid.generate(), text: 'message 2', isPublic: false },
+  { id: shortid.generate(), text: 'message 3', isPublic: true },
+  { id: shortid.generate(), text: 'message 4', isPublic: true },
 ]
 
 if (localStorage.getItem('messages') === null) {
@@ -32,28 +33,12 @@ class messagesApi {
     let messagesStorage = JSON.parse(localStorage.getItem('messages'));
     let index = messagesStorage.findIndex(msg => msg.id === message.id)
     if (index === -1) { // save new message
-      messagesStorage.push({
-        id: message.id,
-        text: message.currentText,
-        isPublic: message.currentIsPublic,
-      })
+      messagesStorage.push(message)
     } else { // update message
-      messagesStorage[index] = {
-        id: message.id,
-        text: message.currentText,
-        isPublic: message.currentIsPublic,
-      };
+      messagesStorage[index] = message;
     }
-
     localStorage.setItem('messages', JSON.stringify(messagesStorage));
-    return {
-      id: message.id,
-      text: message.currentText,
-      isPublic: message.currentIsPublic,
-      currentText: message.currentText,
-      currentIsPublic: message.currentIsPublic,
-      isEdit: false
-    };
+    return message;
   }
 
   deleteMessage = async (id) => {

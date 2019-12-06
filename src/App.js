@@ -31,8 +31,6 @@ const INITIAL_STATE = {
       id: -1,
       text: '',
       isPublic: null,
-      currentText: '',
-      currentIsPublic: null,
     }],
     isFulfilled: null,
     isRejected: null,

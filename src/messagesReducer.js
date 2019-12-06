@@ -1,24 +1,11 @@
 import {
   FETCH_MESSAGES,
   ADD_MESSAGE,
-  SET_CURRENT_TEXT,
-  SET_CURRENT_IS_PUBLIC,
   SAVE_MESSAGE,
   DELETE_MESSAGE,
 } from './messagesActions';
 
-// const INITIAL_STATE = {
-//   messages: [{
-//     id: -1,
-//     text: '',
-//     isPublic: null,
-//     currentText: '',
-//     currentIsPublic: null,
-//   }],
-//   isFulfilled: null,
-//   isRejected: null,
-//   error: null
-// };
+var shortid = require ('shortid'); 
 
 const messagesReducer = (state, action) => {
   console.log('messagesReducer: state=', state);
@@ -34,24 +21,9 @@ const messagesReducer = (state, action) => {
       };
     case `${FETCH_MESSAGES}_FULFILLED`: 
       console.log('messagesReducer: action.type=', action.type);
-      console.log('messagesReducer: action.payload=', action.payload);
-      // init currentText & currentIsPublic with data messages
-      let messagesList = action.payload;
-      console.log('messagesReducer: action.payload=', action.payload);
-      let messages = [];
-      messagesList.forEach((msg) => {
-        messages.push({
-          id: msg.id,
-          text: msg.text,
-          isPublic: msg.isPublic,
-          currentText: msg.text,
-          currentIsPublic: msg.isPublic,
-          isEdit: false
-        })
-      })
       return {
         ...state,
-        messages: messages,
+        messages: action.payload,
         isFulfilled: true,
         isRejected: false,
         error: null
@@ -123,56 +95,19 @@ const messagesReducer = (state, action) => {
         isRejected: true,
         error: null
       };
-    case SET_CURRENT_TEXT: {
-      console.log('messagesReducer: action.type=', action.type, ' action.payload=', action.payload);
-      let id = action.payload.id;
-      let currentText = action.payload.currentText;
-      let messages = state.messages.map((msg) => {
-        if (msg.id === id) {
-          msg.currentText = currentText;
-          msg.isEdit = true
-          return msg;
-        }
-        return msg;
-      })
-      return {
-        ...state,
-        messages: messages
-      };
-    }
-    case SET_CURRENT_IS_PUBLIC: {
-      console.log('messagesReducer: action.type=', action.type, ' action.payload=', action.payload);
-      let _id = action.payload.id;
-      let currentIsPublic = action.payload.currentIsPublic;
-      let messages = state.messages.map((msg) => {
-        if (msg.id === _id) {
-          msg.currentIsPublic = currentIsPublic;
-          msg.isEdit = true
-          return msg;
-        }
-        return msg;
-      })
-      return {
-        ...state,
-        messages: messages
-      };
-    }
     case ADD_MESSAGE: {
       console.log('messagesReducer: action.type=', action.type);
-      let messages = state.messages.slice();
-      messages.push(
+      let _messages = state.messages.slice();
+      _messages.push(
         {
-          id: state.messages.length + 1,
+          id: shortid.generate(),
           text: '',
-          isPublic: false,
-          currentText: '',
-          currentIsPublic: false,
-          isEdit: true
+          isPublic: false
         }
       )
       return {
         ...state,
-        messages: messages
+        messages: _messages
       };
     }
     default:

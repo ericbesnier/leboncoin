@@ -9,7 +9,6 @@ import {
 const pjson = require('../package.json');
 console.log(pjson.version);
 
-
 function Spinner() {
   return (
     <div className="container-fluid">
@@ -35,6 +34,17 @@ function Spinner() {
   )
 }
 
+function MyMessagesList(props) {
+  return props.messages.map((msg) => (
+    <Message
+      key={msg.id}
+      id={msg.id}
+      text={msg.text}
+      isPublic={msg.isPublic}
+    />
+  ));
+}
+
 export class MessagesList extends Component {
   constructor(props) {
     super(props);
@@ -50,17 +60,6 @@ export class MessagesList extends Component {
         <Spinner />
       );
     }
-    const messageList = messages.map((msg) => (
-      <Message
-        key={msg.id}
-        id={msg.id}
-        text={msg.text}
-        isPublic={msg.isPublic}
-        currentText={msg.currentText}
-        currentIsPublic={msg.currentIsPublic}
-        isEdit={msg.isEdit}
-      />
-    ));
 
     return (
       <div className="container-fluid">v{pjson.version}
@@ -71,14 +70,13 @@ export class MessagesList extends Component {
               <table className="table table-responsive-md table-striped text-center">
                 <thead>
                   <tr>
-                    <th className="text-left" style={{ width: '70%' }}>Message</th>
+                    <th className="text-left" style={{ width: '75%' }}>Message</th>
                     <th style={{ width: '20%' }}>Public</th>
-                    <th style={{ width: '5%' }}> </th>
                     <th style={{ width: '5%' }}> </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {messageList}
+                  <MyMessagesList messages={messages} />
                 </tbody>
               </table>
               <span className="table-add float-left mb-3 mr-2">

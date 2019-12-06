@@ -16,8 +16,6 @@ describe('COMPONENT <MessagesList />', () => {
       id: -1,
       text: '',
       isPublic: null,
-      currentText: '',
-      currentIsPublic: null,
     }],
     isFulfilled: false,
     isRejected: null,
